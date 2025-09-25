@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -34,6 +35,7 @@ interface SearchTriggerProps {
 }
 
 export default function SearchTrigger({ className = "" }: SearchTriggerProps) {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   // Set default values to match old search screen
   const [destination, setDestination] = useState("Tai Kwun");
@@ -67,17 +69,19 @@ export default function SearchTrigger({ className = "" }: SearchTriggerProps) {
   ];
 
   const handleSearch = () => {
-    // Handle search logic here
-    console.log("Searching with:", {
-      destination,
-      date,
-      time,
-      travelers,
-      transportMode,
-      selectedActivity,
-      isVisuallyImpaired,
-      needsWheelchair,
+    // Build query parameters
+    const params = new URLSearchParams({
+      destination: destination.trim(),
+      date: formatDateForInput(date),
+      time: time,
+      activity: selectedActivity,
+      transport: transportMode,
+      visuallyImpaired: isVisuallyImpaired.toString(),
+      wheelchairAccess: needsWheelchair.toString(),
     });
+
+    // Navigate to result page with search parameters
+    router.push(`/result?${params.toString()}`);
     setIsOpen(false);
   };
 
