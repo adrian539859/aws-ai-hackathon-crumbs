@@ -78,8 +78,8 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 p-4">
-        <div className="h-[calc(100vh-90px)] w-full">{renderContent()}</div>
+      <main className="flex-1 p-4 overflow-hidden">
+        <div className="h-[calc(100vh-100px)] w-full">{renderContent()}</div>
       </main>
 
       {/* Floating Dock */}
