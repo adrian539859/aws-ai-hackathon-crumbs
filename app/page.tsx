@@ -3,6 +3,8 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { FloatingDock } from "@/components/ui/floating-dock";
+import ExploreView from "@/components/ExploreView";
+import AccountView from "@/components/AccountView";
 import { IconHome, IconCompass, IconUser } from "@tabler/icons-react";
 
 // Dynamically import MapView to avoid SSR issues with Leaflet
@@ -52,31 +54,9 @@ export default function Home() {
           </div>
         );
       case "explore":
-        return (
-          <div className="flex items-center justify-center h-full">
-            <div className="text-center p-8">
-              <IconCompass className="h-16 w-16 mx-auto mb-4 text-gray-400" />
-              <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-                Explore
-              </h2>
-              <p className="text-gray-600">
-                Discover new places and adventures
-              </p>
-            </div>
-          </div>
-        );
+        return <ExploreView />;
       case "account":
-        return (
-          <div className="flex items-center justify-center h-full">
-            <div className="text-center p-8">
-              <IconUser className="h-16 w-16 mx-auto mb-4 text-gray-400" />
-              <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-                Account
-              </h2>
-              <p className="text-gray-600">Manage your profile and settings</p>
-            </div>
-          </div>
-        );
+        return <AccountView />;
       default:
         return null;
     }
