@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import SearchTrigger from "./SearchTrigger";
 import "leaflet/dist/leaflet.css";
 
 // Fix for default markers in React Leaflet
@@ -115,6 +116,11 @@ export default function MapView({ className = "" }: MapViewProps) {
     <div
       className={`w-full h-full rounded-xl overflow-hidden relative ${className}`}
     >
+      {/* Search Trigger - Top Center */}
+      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10">
+        <SearchTrigger />
+      </div>
+
       {/* Loading indicator */}
       {isLocating && (
         <div className="absolute top-4 left-4 z-10 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2 shadow-sm border">
