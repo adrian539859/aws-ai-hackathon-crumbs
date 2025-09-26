@@ -12,6 +12,7 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "db:seed": "tsx scripts/seed-attractions.ts",
+    "db:seed-coupons": "tsx scripts/seed-coupons.ts",
     "db:verify": "tsx scripts/verify-setup.ts"
   },
   "dependencies": {

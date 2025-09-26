@@ -111,3 +111,43 @@ export const tokenHistory = pgTable("tokenHistory", {
   createdAt: timestamp("createdAt").notNull().defaultNow(),
 });
 
+// Coupons table
+export const coupons = pgTable("coupons", {
+  id: text("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  businessName: text("businessName").notNull(),
+  businessAddress: text("businessAddress").notNull(),
+  discountType: text("discountType").notNull(), // 'percentage', 'fixed_amount', 'bogo'
+  discountValue: integer("discountValue").notNull(), // percentage or fixed amount in cents
+  originalPrice: integer("originalPrice"), // original price in cents (optional)
+  finalPrice: integer("finalPrice"), // final price in cents (optional)
+  tokenCost: integer("tokenCost").notNull(), // cost in tokens to redeem
+  category: text("category").notNull(), // 'food', 'shopping', 'entertainment', 'services'
+  imageUrl: text("imageUrl"),
+  terms: text("terms"), // terms and conditions
+  validFrom: timestamp("validFrom").notNull().defaultNow(),
+  validUntil: timestamp("validUntil").notNull(),
+  isActive: boolean("isActive").notNull().default(true),
+  maxRedemptions: integer("maxRedemptions"), // null for unlimited
+  currentRedemptions: integer("currentRedemptions").notNull().default(0),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+});
+
+// User coupon redemptions table
+export const userCoupons = pgTable("userCoupons", {
+  id: text("id").primaryKey(),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  couponId: text("couponId")
+    .notNull()
+    .references(() => coupons.id, { onDelete: "cascade" }),
+  redemptionCode: text("redemptionCode").notNull().unique(), // unique code for the user to show at the store
+  isUsed: boolean("isUsed").notNull().default(false),
+  usedAt: timestamp("usedAt"),
+  redeemedAt: timestamp("redeemedAt").notNull().defaultNow(),
+  expiresAt: timestamp("expiresAt").notNull(),
+});
+

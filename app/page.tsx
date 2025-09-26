@@ -5,7 +5,13 @@ import dynamic from "next/dynamic";
 import { FloatingDock } from "@/components/ui/floating-dock";
 import ExploreView from "@/components/ExploreView";
 import AccountView from "@/components/AccountView";
-import { IconHome, IconCompass, IconUser } from "@tabler/icons-react";
+import CouponView from "@/components/CouponView";
+import {
+  IconHome,
+  IconCompass,
+  IconUser,
+  IconTicket,
+} from "@tabler/icons-react";
 
 // Dynamically import MapView to avoid SSR issues with Leaflet
 const MapView = dynamic(() => import("@/components/MapView"), {
@@ -15,7 +21,7 @@ const MapView = dynamic(() => import("@/components/MapView"), {
   ),
 });
 
-type ViewType = "home" | "explore" | "account";
+type ViewType = "home" | "explore" | "coupons" | "account";
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<ViewType>("home");
@@ -38,6 +44,12 @@ export default function Home() {
       onClick: () => handleNavigation("explore"),
     },
     {
+      title: "Coupons",
+      icon: <IconTicket className="h-full w-full" />,
+      href: "#coupons",
+      onClick: () => handleNavigation("coupons"),
+    },
+    {
       title: "Account",
       icon: <IconUser className="h-full w-full" />,
       href: "#account",
@@ -55,6 +67,8 @@ export default function Home() {
         );
       case "explore":
         return <ExploreView />;
+      case "coupons":
+        return <CouponView />;
       case "account":
         return <AccountView />;
       default:
