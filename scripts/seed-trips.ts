@@ -1795,7 +1795,7 @@ async function seedTrips() {
         name: tripData.name,
         description: tripData.description,
         duration: tripData.duration,
-        rating: Math.random() * 2 + 3.5, // Random rating between 3.5 and 5.5
+        rating: Math.random() * 2 + 3, // Random rating between 3.5 and 5
         reviewCount: Math.floor(Math.random() * 200) + 20, // Random review count between 20 and 220
         isPremium: tripData.isPremium,
         isLocked: tripData.isLocked,
