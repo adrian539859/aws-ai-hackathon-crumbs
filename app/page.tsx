@@ -7,6 +7,7 @@ import ExploreView from "@/components/ExploreView";
 import AccountView from "@/components/AccountView";
 import CouponView from "@/components/CouponView";
 import TripHistoryView from "@/components/TripHistoryView";
+import TokenDisplay from "@/components/TokenDisplay";
 import { useAuth } from "@/hooks/useAuth";
 import {
   IconHome,
@@ -104,7 +105,12 @@ export default function Home() {
           >
             Crumbs
           </button>
-          <div className="text-sm text-gray-500 capitalize">{currentView}</div>
+          <div className="flex items-center gap-4">
+            <TokenDisplay />
+            <div className="text-sm text-gray-500 capitalize">
+              {currentView}
+            </div>
+          </div>
         </div>
       </header>
 

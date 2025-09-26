@@ -55,7 +55,7 @@ export default function ExploreView() {
       setNotification(null);
     }, 5000);
 
-    // Refresh attractions to update rating/review count
+    // Refresh attractions to update rating/review count and token balance
     if (success) {
       const fetchAttractions = async () => {
         try {
@@ -69,6 +69,11 @@ export default function ExploreView() {
         }
       };
       fetchAttractions();
+
+      // Refresh token balance
+      if ((window as any).refreshTokenBalance) {
+        (window as any).refreshTokenBalance();
+      }
     }
   };
 
@@ -227,7 +232,7 @@ export default function ExploreView() {
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
                 >
                   <IconEdit className="w-4 h-4" />
-                  Write Review & Earn 3 Tokens
+                  Review +3 Tokens
                 </button>
               </div>
             </div>
