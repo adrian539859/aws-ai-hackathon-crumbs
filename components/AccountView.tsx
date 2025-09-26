@@ -11,6 +11,7 @@ import {
   IconChevronUp,
   IconTree,
   IconLeaf,
+  IconShoppingCart,
 } from "@tabler/icons-react";
 import { useSession, signIn, signUp, signOut } from "@/lib/auth-client";
 import { useState, useEffect } from "react";
@@ -170,6 +171,41 @@ export default function AccountView() {
     } catch (error) {
       console.error("Error planting trees:", error);
       alert("Failed to plant trees. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Buy tokens
+  const handleBuyTokens = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("/api/tokens", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: 10,
+          type: "bonus",
+          source: "purchase",
+          description: "Purchased 10 tokens",
+          metadata: { purchaseDate: new Date().toISOString() },
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Refresh user stats
+        await fetchUserStats();
+        alert("Successfully purchased 10 tokens!");
+      } else {
+        alert(data.error || "Failed to purchase tokens");
+      }
+    } catch (error) {
+      console.error("Error purchasing tokens:", error);
+      alert("Failed to purchase tokens. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -483,6 +519,25 @@ export default function AccountView() {
                 <IconChevronUp className="w-5 h-5 text-gray-400" />
               ) : (
                 <IconChevronDown className="w-5 h-5 text-gray-400" />
+              )}
+            </button>
+
+            <button
+              onClick={handleBuyTokens}
+              disabled={loading}
+              className="w-full flex items-center space-x-3 p-4 hover:bg-gray-50 transition-colors disabled:opacity-50"
+            >
+              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                <IconShoppingCart className="w-5 h-5 text-blue-600" />
+              </div>
+              <div className="flex-1 text-left">
+                <p className="font-medium text-gray-900">Buy Tokens</p>
+                <p className="text-sm text-gray-600">Get 10 tokens instantly</p>
+              </div>
+              {loading ? (
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
+              ) : (
+                <span className="text-sm font-semibold text-blue-600">+10</span>
               )}
             </button>
 

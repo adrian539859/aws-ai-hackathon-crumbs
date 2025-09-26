@@ -401,45 +401,47 @@ export default function CouponView({ className = "" }: CouponViewProps) {
   );
 
   return (
-    <div className={`w-full h-full flex flex-col ${className}`}>
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Coupons</h1>
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <IconCoin className="h-4 w-4" />
-          <span>{userStats.tokenBalance} tokens</span>
+    <div className={`w-full h-full overflow-y-auto ${className}`}>
+      <div className="max-w-4xl mx-auto px-4 py-6">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">Coupons</h1>
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <IconCoin className="h-4 w-4" />
+            <span>{userStats.tokenBalance} tokens</span>
+          </div>
         </div>
-      </div>
 
-      {/* Tabs */}
-      <div className="flex gap-1 bg-gray-100 p-1 rounded-lg mb-6">
-        <button
-          onClick={() => setActiveTab("available")}
-          className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-            activeTab === "available"
-              ? "bg-white text-gray-900 shadow-sm"
-              : "text-gray-600 hover:text-gray-900"
-          }`}
-        >
-          Available Coupons
-        </button>
-        <button
-          onClick={() => setActiveTab("my-coupons")}
-          className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
-            activeTab === "my-coupons"
-              ? "bg-white text-gray-900 shadow-sm"
-              : "text-gray-600 hover:text-gray-900"
-          }`}
-        >
-          My Coupons
-        </button>
-      </div>
+        {/* Tabs */}
+        <div className="flex gap-1 bg-gray-100 p-1 rounded-lg mb-6">
+          <button
+            onClick={() => setActiveTab("available")}
+            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+              activeTab === "available"
+                ? "bg-white text-gray-900 shadow-sm"
+                : "text-gray-600 hover:text-gray-900"
+            }`}
+          >
+            Available Coupons
+          </button>
+          <button
+            onClick={() => setActiveTab("my-coupons")}
+            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+              activeTab === "my-coupons"
+                ? "bg-white text-gray-900 shadow-sm"
+                : "text-gray-600 hover:text-gray-900"
+            }`}
+          >
+            My Coupons
+          </button>
+        </div>
 
-      {/* Content */}
-      <div className="flex-1 overflow-y-auto">
-        {activeTab === "available"
-          ? renderAvailableCoupons()
-          : renderMyCoupons()}
+        {/* Content */}
+        <div className="flex-1">
+          {activeTab === "available"
+            ? renderAvailableCoupons()
+            : renderMyCoupons()}
+        </div>
       </div>
     </div>
   );
