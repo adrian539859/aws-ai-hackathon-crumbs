@@ -18,6 +18,7 @@ import {
   IconSearch,
 } from "@tabler/icons-react";
 import { ShineBorder } from "@/components/ui/shine-border";
+import TripDetailDialog from "@/components/TripDetailDialog";
 import type { UserTrip } from "@/lib/types";
 
 const getTransportIcon = (mode: string) => {
@@ -81,6 +82,8 @@ export default function TripHistoryView() {
   const [userTrips, setUserTrips] = useState<UserTrip[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
+  const [selectedTrip, setSelectedTrip] = useState<UserTrip | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -113,10 +116,14 @@ export default function TripHistoryView() {
     fetchUserTrips();
   }, [user, selectedStatus]);
 
-  const handleTripSelect = (tripId: string) => {
-    // For now, stay in the current view since trip details are shown in history
-    // Future enhancement: could show expanded trip details or navigate to a detailed view
-    console.log(`Selected trip: ${tripId}`);
+  const handleTripSelect = (userTrip: UserTrip) => {
+    setSelectedTrip(userTrip);
+    setIsDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+    setSelectedTrip(null);
   };
 
   const formatDate = (date: Date) => {
@@ -235,7 +242,7 @@ export default function TripHistoryView() {
                 return (
                   <div
                     key={userTrip.id}
-                    onClick={() => handleTripSelect(trip.id)}
+                    onClick={() => handleTripSelect(userTrip)}
                     className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer hover:shadow-md transition-all duration-200 group"
                   >
                     <div className="relative">
@@ -349,6 +356,13 @@ export default function TripHistoryView() {
             </div>
           )}
         </div>
+
+        {/* Trip Detail Dialog */}
+        <TripDetailDialog
+          isOpen={isDialogOpen}
+          onClose={handleDialogClose}
+          userTrip={selectedTrip}
+        />
       </div>
     </div>
   );

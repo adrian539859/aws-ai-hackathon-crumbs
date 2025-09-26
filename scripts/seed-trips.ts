@@ -26,9 +26,46 @@ const sampleTrips = [
         tokenCost: 0,
         transportMode: ["walk"],
         itinerary: [
-            { id: "stop1", name: "Former Legislative Council Building", description: "Historic government building", duration: "20m", location: "Central", category: "culture", order: 1 },
-            { id: "stop2", name: "Statue Square", description: "Historic public square", duration: "15m", location: "Central", category: "culture", order: 2 },
-            { id: "stop3", name: "Hong Kong Club Building", description: "Colonial architecture", duration: "15m", location: "Central", category: "culture", order: 3 }
+            { 
+                id: "stop1", 
+                name: "Former Legislative Council Building", 
+                description: "Historic government building with neoclassical architecture", 
+                duration: "20m", 
+                location: "Central", 
+                category: "culture", 
+                order: 1,
+                nextTransport: {
+                    method: "walk",
+                    duration: "3m",
+                    distance: "250m",
+                    instructions: "Walk east along Des Voeux Road Central"
+                }
+            },
+            { 
+                id: "stop2", 
+                name: "Statue Square", 
+                description: "Historic public square with colonial monuments", 
+                duration: "15m", 
+                location: "Central", 
+                category: "culture", 
+                order: 2,
+                nextTransport: {
+                    method: "walk",
+                    duration: "2m",
+                    distance: "150m",
+                    instructions: "Cross the road to Chater Road"
+                }
+            },
+            { 
+                id: "stop3", 
+                name: "Hong Kong Club Building", 
+                description: "Colonial architecture and exclusive gentleman's club", 
+                duration: "15m", 
+                location: "Central", 
+                category: "culture", 
+                order: 3,
+                nextTransport: null
+            }
         ]
     },
     {
@@ -41,8 +78,31 @@ const sampleTrips = [
         tokenCost: 0,
         transportMode: ["walk", "car"],
         itinerary: [
-            { id: "stop1", name: "Heritage Gallery", description: "Historical exhibits", duration: "30m", location: "Tai Kwun", category: "culture", order: 1 },
-            { id: "stop2", name: "Contemporary Gallery", description: "Modern art displays", duration: "45m", location: "Tai Kwun", category: "entertainment", order: 2 }
+            { 
+                id: "stop1", 
+                name: "Heritage Gallery", 
+                description: "Historical exhibits about Hong Kong's police history", 
+                duration: "30m", 
+                location: "Tai Kwun", 
+                category: "culture", 
+                order: 1,
+                nextTransport: {
+                    method: "walk",
+                    duration: "5m",
+                    distance: "100m",
+                    instructions: "Walk through the courtyard to the main building"
+                }
+            },
+            { 
+                id: "stop2", 
+                name: "Contemporary Gallery", 
+                description: "Modern art displays and rotating exhibitions", 
+                duration: "45m", 
+                location: "Tai Kwun", 
+                category: "entertainment", 
+                order: 2,
+                nextTransport: null
+            }
         ]
     },
     {
@@ -55,8 +115,31 @@ const sampleTrips = [
         tokenCost: 0,
         transportMode: ["car", "bike"],
         itinerary: [
-            { id: "stop1", name: "Dragon's Back Trail", description: "Scenic hiking trail", duration: "2h", location: "Shek O", category: "nature", order: 1 },
-            { id: "stop2", name: "Big Wave Bay", description: "Coastal photography spot", duration: "1h", location: "Big Wave Bay", category: "nature", order: 2 }
+            { 
+                id: "stop1", 
+                name: "Dragon's Back Trail", 
+                description: "Scenic hiking trail with panoramic views of the South China Sea", 
+                duration: "2h", 
+                location: "Shek O", 
+                category: "nature", 
+                order: 1,
+                nextTransport: {
+                    method: "car",
+                    duration: "15m",
+                    distance: "8km",
+                    instructions: "Drive along Shek O Road towards Big Wave Bay"
+                }
+            },
+            { 
+                id: "stop2", 
+                name: "Big Wave Bay", 
+                description: "Coastal photography spot with golden sand beach", 
+                duration: "1h", 
+                location: "Big Wave Bay", 
+                category: "nature", 
+                order: 2,
+                nextTransport: null
+            }
         ]
     },
     {
@@ -69,8 +152,31 @@ const sampleTrips = [
         tokenCost: 0,
         transportMode: ["walk", "car"],
         itinerary: [
-            { id: "stop1", name: "Causeway Bay Shopping", description: "Major shopping district", duration: "1h", location: "Causeway Bay", category: "shopping", order: 1 },
-            { id: "stop2", name: "Times Square", description: "Shopping mall", duration: "45m", location: "Causeway Bay", category: "shopping", order: 2 }
+            { 
+                id: "stop1", 
+                name: "Causeway Bay Shopping", 
+                description: "Major shopping district with international brands and local boutiques", 
+                duration: "1h", 
+                location: "Causeway Bay", 
+                category: "shopping", 
+                order: 1,
+                nextTransport: {
+                    method: "walk",
+                    duration: "8m",
+                    distance: "600m",
+                    instructions: "Walk south on Russell Street towards Times Square"
+                }
+            },
+            { 
+                id: "stop2", 
+                name: "Times Square", 
+                description: "Multi-level shopping mall with restaurants and entertainment", 
+                duration: "45m", 
+                location: "Causeway Bay", 
+                category: "shopping", 
+                order: 2,
+                nextTransport: null
+            }
         ]
     },
     {
@@ -112,9 +218,46 @@ const sampleTrips = [
         tokenCost: 75,
         transportMode: ["car"],
         itinerary: [
-            { id: "stop1", name: "Hong Kong Museum of Art", description: "VIP private tour", duration: "2h", location: "Tsim Sha Tsui", category: "culture", order: 1 },
-            { id: "stop2", name: "Hong Kong Space Museum", description: "Exclusive planetarium show", duration: "1h 30m", location: "Tsim Sha Tsui", category: "culture", order: 2 },
-            { id: "stop3", name: "Private Collection Viewing", description: "Rare artifacts viewing", duration: "2h", location: "Central", category: "culture", order: 3 }
+            { 
+                id: "stop1", 
+                name: "Hong Kong Museum of Art", 
+                description: "VIP private tour with curator-led exclusive access", 
+                duration: "2h", 
+                location: "Tsim Sha Tsui", 
+                category: "culture", 
+                order: 1,
+                nextTransport: {
+                    method: "walk",
+                    duration: "3m",
+                    distance: "200m",
+                    instructions: "Walk along the waterfront promenade"
+                }
+            },
+            { 
+                id: "stop2", 
+                name: "Hong Kong Space Museum", 
+                description: "Exclusive planetarium show with interactive exhibits", 
+                duration: "1h 30m", 
+                location: "Tsim Sha Tsui", 
+                category: "culture", 
+                order: 2,
+                nextTransport: {
+                    method: "taxi",
+                    duration: "12m",
+                    distance: "4.5km",
+                    instructions: "Take taxi through Cross-Harbour Tunnel to Central"
+                }
+            },
+            { 
+                id: "stop3", 
+                name: "Private Collection Viewing", 
+                description: "Rare artifacts viewing in exclusive private gallery", 
+                duration: "2h", 
+                location: "Central", 
+                category: "culture", 
+                order: 3,
+                nextTransport: null
+            }
         ]
     },
     {

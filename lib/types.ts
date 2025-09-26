@@ -39,8 +39,8 @@ export interface TokenHistory {
   id: string;
   userId: string;
   amount: number; // positive for earned, negative for spent
-  type: 'earned' | 'spent' | 'bonus' | 'refund';
-  source: 'review' | 'signup' | 'purchase' | 'admin' | string;
+  type: "earned" | "spent" | "bonus" | "refund";
+  source: "review" | "signup" | "purchase" | "admin" | string;
   sourceId?: string; // reference to review id, purchase id, etc.
   description: string;
   metadata?: string; // JSON string for additional data
@@ -50,7 +50,7 @@ export interface TokenHistory {
 export interface CreateTokenHistoryRequest {
   userId: string;
   amount: number;
-  type: 'earned' | 'spent' | 'bonus' | 'refund';
+  type: "earned" | "spent" | "bonus" | "refund";
   source: string;
   sourceId?: string;
   description: string;
@@ -63,12 +63,12 @@ export interface Coupon {
   description: string;
   businessName: string;
   businessAddress: string;
-  discountType: 'percentage' | 'fixed_amount' | 'bogo';
+  discountType: "percentage" | "fixed_amount" | "bogo";
   discountValue: number; // percentage or fixed amount in cents
   originalPrice?: number; // original price in cents
   finalPrice?: number; // final price in cents
   tokenCost: number; // cost in tokens to redeem
-  category: 'food' | 'shopping' | 'entertainment' | 'services';
+  category: "food" | "shopping" | "entertainment" | "services";
   imageUrl?: string;
   terms?: string; // terms and conditions
   validFrom: Date;
@@ -107,7 +107,7 @@ export interface Trip {
   isPremium: boolean;
   isLocked: boolean;
   tokenCost: number; // cost in tokens to unlock
-  category: 'restaurant' | 'shopping' | 'entertainment' | 'nature' | 'culture';
+  category: "restaurant" | "shopping" | "entertainment" | "nature" | "culture";
   transportMode: string[]; // array of transport modes
   accessibility: {
     visuallyImpaired: boolean;
@@ -128,6 +128,13 @@ export interface TripStop {
   location: string;
   category: string;
   order: number;
+  // Transportation to next stop (null for last stop)
+  nextTransport?: {
+    method: "walk" | "car" | "bike" | "bus" | "mtr" | "taxi" | "tram";
+    duration: string; // e.g., "5m", "15m"
+    distance?: string; // e.g., "0.3km", "1.2km"
+    instructions?: string; // e.g., "Head north on Queen's Road"
+  } | null;
 }
 
 export interface UserTrip {
@@ -136,7 +143,7 @@ export interface UserTrip {
   tripId: string;
   unlockedAt: Date;
   tokensSpent: number; // tokens spent to unlock
-  status: 'unlocked' | 'started' | 'completed';
+  status: "unlocked" | "started" | "completed";
   startedAt?: Date;
   completedAt?: Date;
   progress?: Record<string, any>; // JSON to track progress through the trip
