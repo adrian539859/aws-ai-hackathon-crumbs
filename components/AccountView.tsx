@@ -215,7 +215,6 @@ export default function AccountView() {
     }
   }, [session]);
 
-
   const handleSignOut = async () => {
     try {
       await signOut();
@@ -262,8 +261,8 @@ export default function AccountView() {
               Earn Tokens by Signing In!
             </h3>
             <p className="text-gray-700 text-sm mb-4">
-              Sign in to start earning tokens by writing reviews for
-              Hong Kong attractions.
+              Sign in to start earning tokens by writing reviews for Hong Kong
+              attractions.
             </p>
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">

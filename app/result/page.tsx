@@ -16,132 +16,11 @@ import {
   IconEye,
   IconWheelchair,
   IconCalendar,
+  IconCoins,
 } from "@tabler/icons-react";
 import { ShineBorder } from "@/components/ui/shine-border";
-
-interface Trip {
-  id: string;
-  name: string;
-  description: string;
-  duration: string;
-  rating: number;
-  reviewCount: number;
-  isPremium: boolean;
-  isLocked: boolean;
-  category: string;
-  accessibility: {
-    visuallyImpaired: boolean;
-    wheelchairAccessible: boolean;
-  };
-  transportMode: string[];
-  imageUrl: string;
-}
-
-// Mock trip data - in a real app this would come from an API
-const mockTrips: Trip[] = [
-  {
-    id: "1",
-    name: "Central Heritage Walk",
-    description: "Explore historic Central district with guided audio tour",
-    duration: "2h 30m",
-    rating: 4.8,
-    reviewCount: 124,
-    isPremium: false,
-    isLocked: false,
-    category: "culture",
-    accessibility: {
-      visuallyImpaired: true,
-      wheelchairAccessible: true,
-    },
-    transportMode: ["walk"],
-    imageUrl: "/api/placeholder/300/200",
-  },
-  {
-    id: "2",
-    name: "Tai Kwun Art Discovery",
-    description: "Contemporary art galleries and historic police station",
-    duration: "1h 45m",
-    rating: 4.6,
-    reviewCount: 89,
-    isPremium: false,
-    isLocked: false,
-    category: "entertainment",
-    accessibility: {
-      visuallyImpaired: false,
-      wheelchairAccessible: true,
-    },
-    transportMode: ["walk", "car"],
-    imageUrl: "/api/placeholder/300/200",
-  },
-  {
-    id: "3",
-    name: "Premium Food Trail",
-    description: "Exclusive dining experience with local chef guides",
-    duration: "3h 15m",
-    rating: 4.9,
-    reviewCount: 67,
-    isPremium: true,
-    isLocked: true,
-    category: "restaurant",
-    accessibility: {
-      visuallyImpaired: false,
-      wheelchairAccessible: false,
-    },
-    transportMode: ["car", "walk"],
-    imageUrl: "/api/placeholder/300/200",
-  },
-  {
-    id: "4",
-    name: "Nature Photography Tour",
-    description: "Capture stunning landscapes in Hong Kong's nature reserves",
-    duration: "4h 00m",
-    rating: 4.7,
-    reviewCount: 156,
-    isPremium: false,
-    isLocked: false,
-    category: "nature",
-    accessibility: {
-      visuallyImpaired: false,
-      wheelchairAccessible: false,
-    },
-    transportMode: ["car", "bike"],
-    imageUrl: "/api/placeholder/300/200",
-  },
-  {
-    id: "5",
-    name: "Shopping District Explorer",
-    description: "Discover hidden gems in bustling shopping areas",
-    duration: "2h 15m",
-    rating: 4.5,
-    reviewCount: 203,
-    isPremium: false,
-    isLocked: false,
-    category: "shopping",
-    accessibility: {
-      visuallyImpaired: true,
-      wheelchairAccessible: true,
-    },
-    transportMode: ["walk", "car"],
-    imageUrl: "/api/placeholder/300/200",
-  },
-  {
-    id: "6",
-    name: "Premium Cultural Experience",
-    description: "VIP access to museums and cultural sites",
-    duration: "5h 30m",
-    rating: 4.9,
-    reviewCount: 45,
-    isPremium: true,
-    isLocked: true,
-    category: "culture",
-    accessibility: {
-      visuallyImpaired: true,
-      wheelchairAccessible: true,
-    },
-    transportMode: ["car"],
-    imageUrl: "/api/placeholder/300/200",
-  },
-];
+import { useAuth } from "@/hooks/useAuth";
+import type { Trip } from "@/lib/types";
 
 const getTransportIcon = (mode: string) => {
   switch (mode) {
@@ -176,8 +55,10 @@ const getCategoryEmoji = (category: string) => {
 function ResultPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { user, requireAuth } = useAuth();
   const [filteredTrips, setFilteredTrips] = useState<Trip[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [unlockingTrip, setUnlockingTrip] = useState<string | null>(null);
 
   // Get search parameters
   const destination = searchParams.get("destination") || "Tai Kwun";
@@ -190,44 +71,40 @@ function ResultPageContent() {
   const wheelchairAccess = searchParams.get("wheelchairAccess") === "true";
 
   useEffect(() => {
-    // Simulate API call delay
-    const timer = setTimeout(() => {
-      let filtered = [...mockTrips];
+    const fetchTrips = async () => {
+      try {
+        setIsLoading(true);
 
-      // Filter by activity/category
-      if (activity && activity !== "") {
-        filtered = filtered.filter((trip) => trip.category === activity);
+        // Build query parameters
+        const params = new URLSearchParams();
+        if (activity && activity !== "") params.append("category", activity);
+        if (transportMode) params.append("transport", transportMode);
+        if (visuallyImpaired) params.append("visuallyImpaired", "true");
+        if (wheelchairAccess) params.append("wheelchairAccess", "true");
+        if (destination) params.append("destination", destination);
+        params.append("limit", "30");
+
+        const response = await fetch(`/api/trips?${params.toString()}`);
+        if (!response.ok) throw new Error("Failed to fetch trips");
+
+        const data = await response.json();
+        setFilteredTrips(data.trips || []);
+      } catch (error) {
+        console.error("Error fetching trips:", error);
+        setFilteredTrips([]);
+      } finally {
+        setIsLoading(false);
       }
+    };
 
-      // Filter by transport mode
-      if (transportMode) {
-        filtered = filtered.filter((trip) =>
-          trip.transportMode.includes(transportMode)
-        );
-      }
-
-      // Filter by accessibility needs
-      if (visuallyImpaired) {
-        filtered = filtered.filter(
-          (trip) => trip.accessibility.visuallyImpaired
-        );
-      }
-
-      if (wheelchairAccess) {
-        filtered = filtered.filter(
-          (trip) => trip.accessibility.wheelchairAccessible
-        );
-      }
-
-      // Sort by rating (highest first)
-      filtered.sort((a, b) => b.rating - a.rating);
-
-      setFilteredTrips(filtered);
-      setIsLoading(false);
-    }, 800);
-
-    return () => clearTimeout(timer);
-  }, [activity, transportMode, visuallyImpaired, wheelchairAccess]);
+    fetchTrips();
+  }, [
+    activity,
+    transportMode,
+    visuallyImpaired,
+    wheelchairAccess,
+    destination,
+  ]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -238,8 +115,57 @@ function ResultPageContent() {
     });
   };
 
+  const handleUnlockTrip = async (trip: Trip, e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (!user) {
+      requireAuth(() => handleUnlockTrip(trip, e));
+      return;
+    }
+
+    if (!trip.isLocked || trip.tokenCost === 0) {
+      handleTripSelect(trip.id);
+      return;
+    }
+
+    try {
+      setUnlockingTrip(trip.id);
+
+      const response = await fetch("/api/trips/unlock", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ tripId: trip.id }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        alert(error.error || "Failed to unlock trip");
+        return;
+      }
+
+      const result = await response.json();
+      alert(
+        `Trip unlocked! You spent ${result.tokensSpent} tokens. Remaining balance: ${result.newBalance}`
+      );
+
+      // Update the trip in the local state
+      setFilteredTrips((prev) =>
+        prev.map((t) => (t.id === trip.id ? { ...t, isLocked: false } : t))
+      );
+
+      // Navigate to trip detail
+      router.push(`/trip/${trip.id}`);
+    } catch (error) {
+      console.error("Error unlocking trip:", error);
+      alert("Failed to unlock trip. Please try again.");
+    } finally {
+      setUnlockingTrip(null);
+    }
+  };
+
   const handleTripSelect = (tripId: string) => {
-    // Navigate to trip detail page (to be implemented)
     router.push(`/trip/${tripId}`);
   };
 
@@ -251,7 +177,7 @@ function ResultPageContent() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="px-4 py-4">
+        <div className="px-4 py-4 max-w-4xl mx-auto">
           <div className="flex items-center gap-4">
             <button
               onClick={handleBack}
@@ -276,39 +202,41 @@ function ResultPageContent() {
 
       {/* Search Summary */}
       <div className="px-4 py-4 bg-white border-b border-gray-100">
-        <div className="flex flex-wrap gap-2">
-          {activity && (
-            <div className="flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm">
-              <span>{getCategoryEmoji(activity)}</span>
-              <span className="capitalize">{activity}</span>
-            </div>
-          )}
-          {transportMode && (
-            <div className="flex items-center gap-1 px-3 py-1 bg-green-50 text-green-700 rounded-full text-sm">
-              {(() => {
-                const Icon = getTransportIcon(transportMode);
-                return <Icon className="w-3 h-3" />;
-              })()}
-              <span className="capitalize">{transportMode}</span>
-            </div>
-          )}
-          {visuallyImpaired && (
-            <div className="flex items-center gap-1 px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-sm">
-              <IconEye className="w-3 h-3" />
-              <span>Audio Guide</span>
-            </div>
-          )}
-          {wheelchairAccess && (
-            <div className="flex items-center gap-1 px-3 py-1 bg-orange-50 text-orange-700 rounded-full text-sm">
-              <IconWheelchair className="w-3 h-3" />
-              <span>Accessible</span>
-            </div>
-          )}
+        <div className="max-w-4xl mx-auto">
+          <div className="flex flex-wrap gap-2">
+            {activity && (
+              <div className="flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm">
+                <span>{getCategoryEmoji(activity)}</span>
+                <span className="capitalize">{activity}</span>
+              </div>
+            )}
+            {transportMode && (
+              <div className="flex items-center gap-1 px-3 py-1 bg-green-50 text-green-700 rounded-full text-sm">
+                {(() => {
+                  const Icon = getTransportIcon(transportMode);
+                  return <Icon className="w-3 h-3" />;
+                })()}
+                <span className="capitalize">{transportMode}</span>
+              </div>
+            )}
+            {visuallyImpaired && (
+              <div className="flex items-center gap-1 px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-sm">
+                <IconEye className="w-3 h-3" />
+                <span>Audio Guide</span>
+              </div>
+            )}
+            {wheelchairAccess && (
+              <div className="flex items-center gap-1 px-3 py-1 bg-orange-50 text-orange-700 rounded-full text-sm">
+                <IconWheelchair className="w-3 h-3" />
+                <span>Accessible</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
       {/* Results */}
-      <div className="px-4 py-6">
+      <div className="px-4 py-6 max-w-4xl mx-auto">
         {isLoading ? (
           <div className="space-y-4">
             {[1, 2, 3].map((i) => (
@@ -437,15 +365,31 @@ function ResultPageContent() {
                         {/* Action Button */}
                         <div className="mt-4 pt-4 border-t border-gray-100">
                           <button
-                            className={`w-full py-2 px-4 rounded-lg font-medium transition-colors ${
+                            onClick={(e) =>
+                              trip.isLocked
+                                ? handleUnlockTrip(trip, e)
+                                : handleTripSelect(trip.id)
+                            }
+                            disabled={unlockingTrip === trip.id}
+                            className={`w-full py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
                               trip.isPremium && trip.isLocked
-                                ? "bg-orange-50 text-orange-700 hover:bg-orange-100"
+                                ? "bg-orange-50 text-orange-700 hover:bg-orange-100 disabled:opacity-50"
                                 : "bg-blue-50 text-blue-700 hover:bg-blue-100"
                             }`}
                           >
-                            {trip.isPremium && trip.isLocked
-                              ? "Unlock Trip"
-                              : "Start Journey"}
+                            {unlockingTrip === trip.id ? (
+                              <>
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
+                                Unlocking...
+                              </>
+                            ) : trip.isPremium && trip.isLocked ? (
+                              <>
+                                <IconCoins className="w-4 h-4" />
+                                Unlock Trip ({trip.tokenCost} tokens)
+                              </>
+                            ) : (
+                              "Start Journey"
+                            )}
                           </button>
                         </div>
                       </div>

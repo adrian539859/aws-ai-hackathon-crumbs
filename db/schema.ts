@@ -167,3 +167,43 @@ export const treePlantings = pgTable("treePlantings", {
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 });
 
+// Trips table - suggested trip itineraries
+export const trips = pgTable("trips", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  duration: text("duration").notNull(), // e.g., "2h 30m"
+  rating: real("rating").notNull().default(0),
+  reviewCount: integer("reviewCount").notNull().default(0),
+  isPremium: boolean("isPremium").notNull().default(false),
+  isLocked: boolean("isLocked").notNull().default(false),
+  tokenCost: integer("tokenCost").notNull().default(0), // cost in tokens to unlock
+  category: text("category").notNull(), // 'restaurant', 'shopping', 'entertainment', 'nature', 'culture'
+  transportMode: text("transportMode").notNull(), // JSON array of transport modes
+  accessibility: text("accessibility").notNull(), // JSON object with accessibility options
+  imageUrl: text("imageUrl"),
+  itinerary: text("itinerary").notNull(), // JSON array of stops/attractions
+  metadata: text("metadata"), // JSON string for additional data
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+});
+
+// User trip history - tracks unlocked/purchased trips
+export const userTrips = pgTable("userTrips", {
+  id: text("id").primaryKey(),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  tripId: text("tripId")
+    .notNull()
+    .references(() => trips.id, { onDelete: "cascade" }),
+  unlockedAt: timestamp("unlockedAt").notNull().defaultNow(),
+  tokensSpent: integer("tokensSpent").notNull().default(0), // tokens spent to unlock
+  status: text("status").notNull().default("unlocked"), // 'unlocked', 'started', 'completed'
+  startedAt: timestamp("startedAt"),
+  completedAt: timestamp("completedAt"),
+  progress: text("progress"), // JSON string to track progress through the trip
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+});
+

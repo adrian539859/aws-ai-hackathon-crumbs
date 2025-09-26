@@ -6,12 +6,14 @@ import { FloatingDock } from "@/components/ui/floating-dock";
 import ExploreView from "@/components/ExploreView";
 import AccountView from "@/components/AccountView";
 import CouponView from "@/components/CouponView";
+import TripHistoryView from "@/components/TripHistoryView";
 import { useAuth } from "@/hooks/useAuth";
 import {
   IconHome,
   IconCompass,
   IconUser,
   IconTicket,
+  IconMapPin,
 } from "@tabler/icons-react";
 
 // Dynamically import MapView to avoid SSR issues with Leaflet
@@ -22,15 +24,15 @@ const MapView = dynamic(() => import("@/components/MapView"), {
   ),
 });
 
-type ViewType = "home" | "explore" | "coupons" | "account";
+type ViewType = "home" | "explore" | "trips" | "coupons" | "account";
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<ViewType>("home");
   const { requireAuth } = useAuth();
 
   const handleNavigation = (view: ViewType) => {
-    // Require authentication for coupons and account pages
-    if (view === "coupons" || view === "account") {
+    // Require authentication for trips, coupons and account pages
+    if (view === "trips" || view === "coupons" || view === "account") {
       requireAuth(() => setCurrentView(view));
     } else {
       setCurrentView(view);
@@ -49,6 +51,12 @@ export default function Home() {
       icon: <IconCompass className="h-full w-full" />,
       href: "#explore",
       onClick: () => handleNavigation("explore"),
+    },
+    {
+      title: "My Trips",
+      icon: <IconMapPin className="h-full w-full" />,
+      href: "#trips",
+      onClick: () => handleNavigation("trips"),
     },
     {
       title: "Coupons",
@@ -74,6 +82,8 @@ export default function Home() {
         );
       case "explore":
         return <ExploreView />;
+      case "trips":
+        return <TripHistoryView />;
       case "coupons":
         return <CouponView />;
       case "account":

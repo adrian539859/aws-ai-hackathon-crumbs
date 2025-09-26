@@ -22,6 +22,13 @@
       "when": 1758852185426,
       "tag": "0002_solid_stryfe",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1758854282445,
+      "tag": "0003_opposite_tinkerer",
+      "breakpoints": true
     }
   ]
 }

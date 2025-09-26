@@ -96,3 +96,56 @@ export interface UserCoupon {
 export interface RedeemCouponRequest {
   couponId: string;
 }
+
+export interface Trip {
+  id: string;
+  name: string;
+  description: string;
+  duration: string; // e.g., "2h 30m"
+  rating: number;
+  reviewCount: number;
+  isPremium: boolean;
+  isLocked: boolean;
+  tokenCost: number; // cost in tokens to unlock
+  category: 'restaurant' | 'shopping' | 'entertainment' | 'nature' | 'culture';
+  transportMode: string[]; // array of transport modes
+  accessibility: {
+    visuallyImpaired: boolean;
+    wheelchairAccessible: boolean;
+  };
+  imageUrl?: string;
+  itinerary: TripStop[]; // array of stops/attractions
+  metadata?: Record<string, any>;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface TripStop {
+  id: string;
+  name: string;
+  description: string;
+  duration: string;
+  location: string;
+  category: string;
+  order: number;
+}
+
+export interface UserTrip {
+  id: string;
+  userId: string;
+  tripId: string;
+  unlockedAt: Date;
+  tokensSpent: number; // tokens spent to unlock
+  status: 'unlocked' | 'started' | 'completed';
+  startedAt?: Date;
+  completedAt?: Date;
+  progress?: Record<string, any>; // JSON to track progress through the trip
+  createdAt: Date;
+  updatedAt: Date;
+  // Joined trip data
+  trip?: Trip;
+}
+
+export interface UnlockTripRequest {
+  tripId: string;
+}
