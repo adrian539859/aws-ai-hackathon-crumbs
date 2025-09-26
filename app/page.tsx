@@ -6,6 +6,7 @@ import { FloatingDock } from "@/components/ui/floating-dock";
 import ExploreView from "@/components/ExploreView";
 import AccountView from "@/components/AccountView";
 import CouponView from "@/components/CouponView";
+import { useAuth } from "@/hooks/useAuth";
 import {
   IconHome,
   IconCompass,
@@ -25,9 +26,15 @@ type ViewType = "home" | "explore" | "coupons" | "account";
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<ViewType>("home");
+  const { requireAuth } = useAuth();
 
   const handleNavigation = (view: ViewType) => {
-    setCurrentView(view);
+    // Require authentication for coupons and account pages
+    if (view === "coupons" || view === "account") {
+      requireAuth(() => setCurrentView(view));
+    } else {
+      setCurrentView(view);
+    }
   };
 
   const dockItems = [

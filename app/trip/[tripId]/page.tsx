@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 import {
   IconArrowLeft,
   IconStar,
@@ -16,10 +17,16 @@ interface TripDetailPageProps {
 
 export default function TripDetailPage({ params }: TripDetailPageProps) {
   const router = useRouter();
+  const { requireAuth } = useAuth();
   const { tripId } = params;
 
   const handleBack = () => {
     router.back();
+  };
+
+  const handleStartTrip = () => {
+    // For now, just go back, but this could navigate to a trip start page
+    handleBack();
   };
 
   return (
@@ -76,7 +83,7 @@ export default function TripDetailPage({ params }: TripDetailPageProps) {
             </div>
 
             <button
-              onClick={handleBack}
+              onClick={() => requireAuth(handleStartTrip)}
               className="mt-6 w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
             >
               Start Trip

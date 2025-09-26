@@ -3,9 +3,11 @@
 import { useState, useEffect } from "react";
 import { IconStar, IconMapPin, IconClock, IconEdit } from "@tabler/icons-react";
 import { Attraction } from "@/lib/types";
+import { useAuth } from "@/hooks/useAuth";
 import ReviewDialog from "./ReviewDialog";
 
 export default function ExploreView() {
+  const { requireAuth } = useAuth();
   const [attractions, setAttractions] = useState<Attraction[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -217,7 +219,11 @@ export default function ExploreView() {
 
                 {/* Review Button */}
                 <button
-                  onClick={() => handleReview(attraction.id, attraction.name)}
+                  onClick={() =>
+                    requireAuth(() =>
+                      handleReview(attraction.id, attraction.name)
+                    )
+                  }
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
                 >
                   <IconEdit className="w-4 h-4" />

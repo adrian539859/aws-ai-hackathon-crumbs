@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Coupon, UserCoupon } from "@/lib/types";
+import { useAuth } from "@/hooks/useAuth";
 import {
   IconGift,
   IconCoin,
@@ -23,6 +24,7 @@ interface CouponViewProps {
 type TabType = "available" | "my-coupons";
 
 export default function CouponView({ className = "" }: CouponViewProps) {
+  const { requireAuth } = useAuth();
   const [activeTab, setActiveTab] = useState<TabType>("available");
   const [availableCoupons, setAvailableCoupons] = useState<Coupon[]>([]);
   const [myCoupons, setMyCoupons] = useState<UserCoupon[]>([]);
@@ -270,7 +272,9 @@ export default function CouponView({ className = "" }: CouponViewProps) {
                   )}
                 </div>
                 <button
-                  onClick={() => handleRedeemCoupon(coupon.id)}
+                  onClick={() =>
+                    requireAuth(() => handleRedeemCoupon(coupon.id))
+                  }
                   disabled={
                     redeeming === coupon.id ||
                     userStats.tokenBalance < coupon.tokenCost

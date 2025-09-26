@@ -13,9 +13,10 @@ import {
   IconLeaf,
   IconShoppingCart,
 } from "@tabler/icons-react";
-import { useSession, signIn, signUp, signOut } from "@/lib/auth-client";
+import { useSession, signOut } from "@/lib/auth-client";
 import { useState, useEffect } from "react";
 import { TokenHistory } from "@/lib/types";
+import { useLogin } from "./LoginProvider";
 
 interface UserStats {
   tokenBalance: number;
@@ -49,11 +50,7 @@ interface UserReview {
 
 export default function AccountView() {
   const { data: session, isPending } = useSession();
-  const [showSignIn, setShowSignIn] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [isSignUp, setIsSignUp] = useState(false);
+  const { openLogin } = useLogin();
 
   // New state for real data
   const [userStats, setUserStats] = useState<UserStats>({
@@ -218,57 +215,6 @@ export default function AccountView() {
     }
   }, [session]);
 
-  const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await signIn.email({
-        email,
-        password,
-      });
-      setShowSignIn(false);
-      setEmail("");
-      setPassword("");
-    } catch (error) {
-      console.error("Sign in failed:", error);
-    }
-  };
-
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await signUp.email({
-        email,
-        password,
-        name,
-      });
-
-      // Award signup bonus tokens
-      try {
-        await fetch("/api/tokens", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            amount: 100,
-            type: "bonus",
-            source: "signup",
-            description: "Welcome bonus for signing up!",
-            metadata: { signupDate: new Date().toISOString() },
-          }),
-        });
-      } catch (tokenError) {
-        console.error("Failed to award signup bonus:", tokenError);
-      }
-
-      setShowSignIn(false);
-      setEmail("");
-      setPassword("");
-      setName("");
-    } catch (error) {
-      console.error("Sign up failed:", error);
-    }
-  };
 
   const handleSignOut = async () => {
     try {
@@ -302,7 +248,7 @@ export default function AccountView() {
               Access your profile, reviews, and earn tokens
             </p>
             <button
-              onClick={() => setShowSignIn(true)}
+              onClick={openLogin}
               className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2"
             >
               <IconLogin className="w-5 h-5" />
@@ -310,97 +256,16 @@ export default function AccountView() {
             </button>
           </div>
 
-          {/* Sign In Modal */}
-          {showSignIn && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-              <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    {isSignUp ? "Create Account" : "Sign In"}
-                  </h3>
-                  <button
-                    onClick={() => setShowSignIn(false)}
-                    className="text-gray-400 hover:text-gray-600"
-                  >
-                    ✕
-                  </button>
-                </div>
-
-                <form onSubmit={isSignUp ? handleSignUp : handleSignIn}>
-                  {isSignUp && (
-                    <div className="mb-4">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Name
-                      </label>
-                      <input
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                      />
-                    </div>
-                  )}
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-                  <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-lg transition-colors"
-                  >
-                    {isSignUp ? "Create Account" : "Sign In"}
-                  </button>
-                </form>
-
-                <div className="mt-4 text-center">
-                  <button
-                    onClick={() => setIsSignUp(!isSignUp)}
-                    className="text-sm text-blue-500 hover:text-blue-600"
-                  >
-                    {isSignUp
-                      ? "Already have an account? Sign in"
-                      : "Don't have an account? Sign up"}
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* Token System Info */}
           <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border border-yellow-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Earn Tokens by Signing Up!
+              Earn Tokens by Signing In!
             </h3>
             <p className="text-gray-700 text-sm mb-4">
-              Create an account to start earning tokens by writing reviews for
+              Sign in to start earning tokens by writing reviews for
               Hong Kong attractions.
             </p>
             <div className="space-y-2">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">Sign up bonus</span>
-                <span className="font-medium text-yellow-600">+100 tokens</span>
-              </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-600">Write a review</span>
                 <span className="font-medium text-yellow-600">+3 tokens</span>
