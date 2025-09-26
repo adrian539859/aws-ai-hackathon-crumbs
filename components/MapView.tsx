@@ -34,12 +34,20 @@ const createUserIcon = () => {
 };
 
 // Component to handle map updates when position changes
-function MapUpdater({ center }: { center: [number, number] }) {
+function MapUpdater({
+  center,
+  hasUserLocation,
+}: {
+  center: [number, number];
+  hasUserLocation: boolean;
+}) {
   const map = useMap();
 
   useEffect(() => {
-    map.setView(center, 16);
-  }, [center, map]);
+    // Use higher zoom level when user location is available
+    const zoomLevel = hasUserLocation ? 16 : 13;
+    map.setView(center, zoomLevel);
+  }, [center, map, hasUserLocation]);
 
   return null;
 }
@@ -106,8 +114,8 @@ export default function MapView({ className = "" }: MapViewProps) {
     }
   }, []);
 
-  // Default center (San Francisco) if no user location
-  const defaultCenter: [number, number] = [37.7749, -122.4194];
+  // Default center (Hong Kong) if no user location
+  const defaultCenter: [number, number] = [22.3193, 114.1694];
   const center: [number, number] = userPosition
     ? [userPosition.lat, userPosition.lng]
     : defaultCenter;
@@ -154,7 +162,7 @@ export default function MapView({ className = "" }: MapViewProps) {
         className="z-0"
         ref={mapRef}
       >
-        <MapUpdater center={center} />
+        <MapUpdater center={center} hasUserLocation={!!userPosition} />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png"
@@ -185,7 +193,7 @@ export default function MapView({ className = "" }: MapViewProps) {
           <Marker position={defaultCenter}>
             <Popup>
               <div className="p-2">
-                <h3 className="font-semibold text-gray-900">San Francisco</h3>
+                <h3 className="font-semibold text-gray-900">Hong Kong</h3>
                 <p className="text-gray-600">
                   Default location - enable location access to see your
                   position!
