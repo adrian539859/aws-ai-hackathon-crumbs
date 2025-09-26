@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { FloatingDock } from "@/components/ui/floating-dock";
 import ExploreView from "@/components/ExploreView";
 import AccountView from "@/components/AccountView";
@@ -101,9 +102,16 @@ export default function Home() {
         <div className="flex items-center justify-between">
           <button
             onClick={() => handleNavigation("home")}
-            className="text-xl font-semibold text-gray-900 hover:text-gray-700 transition-colors cursor-pointer"
+            className="hover:opacity-80 transition-opacity cursor-pointer flex items-center"
           >
-            Crumbs
+            <Image
+              src="/crumbs-logo.png"
+              alt="Crumbs"
+              width={120}
+              height={40}
+              className="h-8 w-auto"
+              priority
+            />
           </button>
           <div className="flex items-center gap-4">
             <TokenDisplay />
