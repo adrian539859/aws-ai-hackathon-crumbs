@@ -15,6 +15,13 @@
       "when": 1758850378196,
       "tag": "0001_fine_tony_stark",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1758852185426,
+      "tag": "0002_solid_stryfe",
+      "breakpoints": true
     }
   ]
 }

@@ -23,7 +23,7 @@ const couponData = [
         discountValue: 20,
         originalPrice: null,
         finalPrice: null,
-        tokenCost: 50,
+        tokenCost: 15,
         category: "food" as const,
         imageUrl: "https://images.unsplash.com/photo-1563379091339-03246963d96a?w=400",
         terms: "Valid for lunch hours only. Cannot be combined with other offers. Maximum 4 people per table.",
@@ -43,7 +43,7 @@ const couponData = [
         discountValue: 5000, // HK$50 in cents
         originalPrice: null,
         finalPrice: null,
-        tokenCost: 40,
+        tokenCost: 12,
         category: "food" as const,
         imageUrl: "https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=400",
         terms: "Minimum spend HK$200. Valid for dine-in only. One coupon per table per visit.",
@@ -63,7 +63,7 @@ const couponData = [
         discountValue: 1,
         originalPrice: 2500, // HK$25 for 2 waffles
         finalPrice: 2500, // Pay for 1, get 2
-        tokenCost: 30,
+        tokenCost: 9,
         category: "food" as const,
         imageUrl: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400",
         terms: "Valid after 6 PM only. Both waffles must be of the same flavor. Cash payment only.",
@@ -85,7 +85,7 @@ const couponData = [
         discountValue: 15,
         originalPrice: null,
         finalPrice: null,
-        tokenCost: 60,
+        tokenCost: 18,
         category: "shopping" as const,
         imageUrl: "https://images.unsplash.com/photo-1609078593732-f8b5c4b7e3c5?w=400",
         terms: "Excludes consultation fees. Valid for in-store purchases only. Cannot be combined with membership discounts.",
@@ -105,7 +105,7 @@ const couponData = [
         discountValue: 10000, // HK$100 in cents
         originalPrice: null,
         finalPrice: null,
-        tokenCost: 80,
+        tokenCost: 24,
         category: "shopping" as const,
         imageUrl: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400",
         terms: "Minimum spend HK$500. Valid on regular-priced items only. Excludes sale items and accessories.",
@@ -127,7 +127,7 @@ const couponData = [
         discountValue: 25,
         originalPrice: 20000, // HK$200 for 2 hours
         finalPrice: 15000, // HK$150 after discount
-        tokenCost: 45,
+        tokenCost: 13,
         category: "entertainment" as const,
         imageUrl: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400",
         terms: "Valid Monday to Friday, 2 PM - 6 PM only. Advance booking required. Food and drinks not included.",
@@ -147,7 +147,7 @@ const couponData = [
         discountValue: 1,
         originalPrice: 8000, // HK$80 (tea set + game)
         finalPrice: 5000, // HK$50 (tea set only)
-        tokenCost: 25,
+        tokenCost: 7,
         category: "entertainment" as const,
         imageUrl: "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=400",
         terms: "Valid for groups of 4 players. Tea set purchase mandatory. Game time limited to 2 hours.",
@@ -169,7 +169,7 @@ const couponData = [
         discountValue: 30,
         originalPrice: 50000, // HK$500 for 60 minutes
         finalPrice: 35000, // HK$350 after discount
-        tokenCost: 70,
+        tokenCost: 21,
         category: "services" as const,
         imageUrl: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=400",
         terms: "Appointment required. Valid for first-time customers only. Cannot be combined with package deals.",
@@ -189,7 +189,7 @@ const couponData = [
         discountValue: 20000, // HK$200 in cents
         originalPrice: null,
         finalPrice: null,
-        tokenCost: 100,
+        tokenCost: 30,
         category: "services" as const,
         imageUrl: "https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=400",
         terms: "Minimum order HK$1000. Excludes fabric cost. 2-week delivery time. Fitting appointments required.",
@@ -209,7 +209,7 @@ const couponData = [
         discountValue: 80000, // HK$800 value
         originalPrice: 80000,
         finalPrice: 0,
-        tokenCost: 120,
+        tokenCost: 36,
         category: "services" as const,
         imageUrl: "https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=400",
         terms: "Appointment only. One consultation per customer. Additional services charged separately. Valid weekdays only.",
@@ -231,7 +231,7 @@ const couponData = [
         discountValue: 10,
         originalPrice: null,
         finalPrice: null,
-        tokenCost: 35,
+        tokenCost: 10,
         category: "food" as const,
         imageUrl: "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400",
         terms: "Valid for dine-in and takeaway. Cannot be combined with set meal discounts. Limited to 2 orders per coupon.",
@@ -251,7 +251,7 @@ const couponData = [
         discountValue: 1,
         originalPrice: 4500, // HK$45 (coffee + bun)
         finalPrice: 2800, // HK$28 (coffee only)
-        tokenCost: 20,
+        tokenCost: 6,
         category: "food" as const,
         imageUrl: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400",
         terms: "Valid all day. Dine-in only. One free bun per coffee purchased. Cannot be combined with other promotions.",

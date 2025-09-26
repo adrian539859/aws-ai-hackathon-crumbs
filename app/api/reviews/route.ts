@@ -60,8 +60,8 @@ export async function POST(request: NextRequest) {
         // Generate review ID
         const reviewId = `review_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-        // Calculate tokens earned (base 10 tokens, bonus for longer reviews)
-        const tokensEarned = content.length > 100 ? 15 : 10;
+        // Calculate tokens earned (3 tokens per review)
+        const tokensEarned = 3;
 
         // Create the review
         const newReview = await db.insert(reviews).values({

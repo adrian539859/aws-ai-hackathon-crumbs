@@ -151,3 +151,19 @@ export const userCoupons = pgTable("userCoupons", {
   expiresAt: timestamp("expiresAt").notNull(),
 });
 
+// Tree planting donations table for ESG initiative
+export const treePlantings = pgTable("treePlantings", {
+  id: text("id").primaryKey(),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  tokensCost: integer("tokensCost").notNull().default(10), // cost in tokens (10 tokens per tree)
+  treeCount: integer("treeCount").notNull().default(1), // number of trees planted
+  certificateId: text("certificateId").notNull().unique(), // unique certificate ID for the donation
+  plantingLocation: text("plantingLocation").notNull().default("Hong Kong Reforestation Initiative"), // where the tree is planted
+  status: text("status").notNull().default("confirmed"), // 'confirmed', 'planted', 'verified'
+  metadata: text("metadata"), // JSON string for additional data (e.g., tree species, coordinates)
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+});
+
