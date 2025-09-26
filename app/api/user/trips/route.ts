@@ -4,6 +4,7 @@ import { userTrips, trips } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { nanoid } from "nanoid";
 import type { UserTrip } from "@/lib/types";
 
 export async function GET(request: NextRequest) {
@@ -109,6 +110,89 @@ export async function GET(request: NextRequest) {
         console.error("Error fetching user trips:", error);
         return NextResponse.json(
             { error: "Failed to fetch user trips" },
+            { status: 500 }
+        );
+    }
+}
+
+// Create a new user trip (for free trips)
+export async function POST(request: NextRequest) {
+    try {
+        const session = await auth.api.getSession({
+            headers: await headers()
+        });
+
+        if (!session?.user) {
+            return NextResponse.json(
+                { error: "Authentication required" },
+                { status: 401 }
+            );
+        }
+
+        const { tripId, tokensSpent = 0, status = 'unlocked' } = await request.json();
+
+        if (!tripId) {
+            return NextResponse.json(
+                { error: "Trip ID is required" },
+                { status: 400 }
+            );
+        }
+
+        // Check if trip exists
+        const trip = await db
+            .select()
+            .from(trips)
+            .where(eq(trips.id, tripId))
+            .limit(1);
+
+        if (trip.length === 0) {
+            return NextResponse.json(
+                { error: "Trip not found" },
+                { status: 404 }
+            );
+        }
+
+        // Check if user already has this trip
+        const existingUserTrip = await db
+            .select()
+            .from(userTrips)
+            .where(and(
+                eq(userTrips.userId, session.user.id),
+                eq(userTrips.tripId, tripId)
+            ))
+            .limit(1);
+
+        if (existingUserTrip.length > 0) {
+            return NextResponse.json(
+                { error: "Trip already in your collection" },
+                { status: 400 }
+            );
+        }
+
+        // Create user trip record
+        const newUserTrip = {
+            id: nanoid(),
+            userId: session.user.id,
+            tripId: tripId,
+            unlockedAt: new Date(),
+            tokensSpent: tokensSpent,
+            status: status,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        };
+
+        await db.insert(userTrips).values(newUserTrip);
+
+        return NextResponse.json({
+            success: true,
+            message: "Trip added to your collection successfully",
+            userTrip: newUserTrip
+        });
+
+    } catch (error) {
+        console.error("Error creating user trip:", error);
+        return NextResponse.json(
+            { error: "Failed to add trip to collection" },
             { status: 500 }
         );
     }

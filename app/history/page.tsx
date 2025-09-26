@@ -120,7 +120,9 @@ export default function TripHistoryPage() {
   };
 
   const handleTripSelect = (tripId: string) => {
-    router.push(`/trip/${tripId}`);
+    // For now, stay in the history view since trip details are already shown
+    // Future enhancement: could show expanded trip details or navigate to a detailed view
+    console.log(`Selected trip: ${tripId}`);
   };
 
   const formatDate = (date: Date) => {

@@ -114,8 +114,9 @@ export default function TripHistoryView() {
   }, [user, selectedStatus]);
 
   const handleTripSelect = (tripId: string) => {
-    // Open trip detail in a new tab/window or navigate
-    window.open(`/trip/${tripId}`, "_blank");
+    // For now, stay in the current view since trip details are shown in history
+    // Future enhancement: could show expanded trip details or navigate to a detailed view
+    console.log(`Selected trip: ${tripId}`);
   };
 
   const formatDate = (date: Date) => {

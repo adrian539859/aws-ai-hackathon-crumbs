@@ -59,6 +59,7 @@ function ResultPageContent() {
   const [filteredTrips, setFilteredTrips] = useState<Trip[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [unlockingTrip, setUnlockingTrip] = useState<string | null>(null);
+  const [userTrips, setUserTrips] = useState<string[]>([]); // Track user's unlocked trips
 
   // Get search parameters
   const destination = searchParams.get("destination") || "Tai Kwun";
@@ -69,6 +70,27 @@ function ResultPageContent() {
   const transportMode = searchParams.get("transport") || "car";
   const visuallyImpaired = searchParams.get("visuallyImpaired") === "true";
   const wheelchairAccess = searchParams.get("wheelchairAccess") === "true";
+
+  // Fetch user's unlocked trips
+  useEffect(() => {
+    const fetchUserTrips = async () => {
+      if (!user) return;
+
+      try {
+        const response = await fetch("/api/user/trips");
+        if (response.ok) {
+          const data = await response.json();
+          const tripIds =
+            data.userTrips?.map((userTrip: any) => userTrip.tripId) || [];
+          setUserTrips(tripIds);
+        }
+      } catch (error) {
+        console.error("Error fetching user trips:", error);
+      }
+    };
+
+    fetchUserTrips();
+  }, [user]);
 
   useEffect(() => {
     const fetchTrips = async () => {
@@ -123,7 +145,8 @@ function ResultPageContent() {
       return;
     }
 
-    if (!trip.isLocked || trip.tokenCost === 0) {
+    // If trip is not locked, handle as trip selection
+    if (!trip.isLocked) {
       handleTripSelect(trip.id);
       return;
     }
@@ -155,8 +178,11 @@ function ResultPageContent() {
         prev.map((t) => (t.id === trip.id ? { ...t, isLocked: false } : t))
       );
 
-      // Navigate to trip detail
-      router.push(`/trip/${trip.id}`);
+      // Add trip to user's unlocked trips
+      setUserTrips((prev) => [...prev, trip.id]);
+
+      // Navigate to history view to see the unlocked trip
+      router.push("/history");
     } catch (error) {
       console.error("Error unlocking trip:", error);
       alert("Failed to unlock trip. Please try again.");
@@ -165,8 +191,69 @@ function ResultPageContent() {
     }
   };
 
+  const handleFreeUnlock = async (trip: Trip) => {
+    console.log("handleFreeUnlock called for trip:", trip.name);
+    if (!user) {
+      requireAuth(() => handleFreeUnlock(trip));
+      return;
+    }
+
+    try {
+      // For free trips, we'll create a user trip record directly via API
+      const response = await fetch("/api/user/trips", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          tripId: trip.id,
+          tokensSpent: 0,
+          status: "unlocked",
+        }),
+      });
+
+      if (response.ok) {
+        // Add trip to user's unlocked trips
+        setUserTrips((prev) => [...prev, trip.id]);
+
+        // Show success message
+        alert(`${trip.name} has been added to your collection!`);
+
+        // Navigate to history view
+        router.push("/history");
+      } else {
+        const errorData = await response.json();
+        console.error("API Error:", errorData);
+        alert(
+          `Failed to unlock trip: ${errorData.error || "Please try again."}`
+        );
+      }
+    } catch (error) {
+      console.error("Error unlocking free trip:", error);
+      alert("Failed to unlock trip. Please try again.");
+    }
+  };
+
   const handleTripSelect = (tripId: string) => {
-    router.push(`/trip/${tripId}`);
+    console.log("handleTripSelect called for trip:", tripId);
+    if (!user) {
+      requireAuth(() => handleTripSelect(tripId));
+      return;
+    }
+
+    // Check if user has this trip unlocked using local state
+    const hasTrip = userTrips.includes(tripId);
+    console.log("User has trip:", hasTrip, "userTrips:", userTrips);
+
+    if (hasTrip) {
+      // User already has this trip, redirect to history
+      router.push("/history");
+    } else {
+      // Trip not unlocked yet, show message
+      alert(
+        "This trip needs to be unlocked first. Please unlock it to access the details."
+      );
+    }
   };
 
   const handleBack = () => {
@@ -316,7 +403,8 @@ function ResultPageContent() {
                                 {trip.name}
                               </h3>
                               <div className="flex items-center gap-1">
-                                {trip.isPremium ? (
+                                {trip.isPremium &&
+                                !userTrips.includes(trip.id) ? (
                                   <IconLock className="w-4 h-4 text-orange-500" />
                                 ) : (
                                   <IconLockOpen className="w-4 h-4 text-green-500" />
@@ -365,14 +453,25 @@ function ResultPageContent() {
                         {/* Action Button */}
                         <div className="mt-4 pt-4 border-t border-gray-100">
                           <button
-                            onClick={(e) =>
-                              trip.isLocked
-                                ? handleUnlockTrip(trip, e)
-                                : handleTripSelect(trip.id)
-                            }
+                            onClick={(e) => {
+                              e.stopPropagation(); // Prevent card click from triggering
+                              const isUnlocked = userTrips.includes(trip.id);
+                              if (isUnlocked) {
+                                // Already unlocked, start journey
+                                handleTripSelect(trip.id);
+                              } else if (trip.isLocked) {
+                                // Premium locked trip, requires tokens
+                                handleUnlockTrip(trip, e);
+                              } else {
+                                // Free trip, unlock for free
+                                handleFreeUnlock(trip);
+                              }
+                            }}
                             disabled={unlockingTrip === trip.id}
                             className={`w-full py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
-                              trip.isPremium && trip.isLocked
+                              trip.isPremium &&
+                              trip.isLocked &&
+                              !userTrips.includes(trip.id)
                                 ? "bg-orange-50 text-orange-700 hover:bg-orange-100 disabled:opacity-50"
                                 : "bg-blue-50 text-blue-700 hover:bg-blue-100"
                             }`}
@@ -382,13 +481,17 @@ function ResultPageContent() {
                                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
                                 Unlocking...
                               </>
-                            ) : trip.isPremium && trip.isLocked ? (
+                            ) : trip.isPremium &&
+                              trip.isLocked &&
+                              !userTrips.includes(trip.id) ? (
                               <>
                                 <IconCoins className="w-4 h-4" />
                                 Unlock Trip ({trip.tokenCost} tokens)
                               </>
-                            ) : (
+                            ) : userTrips.includes(trip.id) ? (
                               "Start Journey"
+                            ) : (
+                              "Unlock Free"
                             )}
                           </button>
                         </div>
