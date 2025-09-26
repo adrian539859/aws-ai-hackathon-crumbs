@@ -1799,7 +1799,7 @@ async function seedTrips() {
         reviewCount: Math.floor(Math.random() * 200) + 20, // Random review count between 20 and 220
         isPremium: tripData.isPremium,
         isLocked: tripData.isLocked,
-        tokenCost: tripData.tokenCost,
+        tokenCost: [2, 3, 4, 5, 6, 7, 8, 9, 10][Math.floor(Math.random() * 9)],
         category: tripData.category,
         transportMode: JSON.stringify(tripData.transportMode),
         accessibility: JSON.stringify({
