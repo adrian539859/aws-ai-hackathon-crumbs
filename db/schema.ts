@@ -5,6 +5,8 @@ import {
   pgTable,
   timestamp,
   primaryKey,
+  real,
+  uuid,
 } from "drizzle-orm/pg-core";
 
 // Better Auth required tables
@@ -57,3 +59,55 @@ export const verification = pgTable("verification", {
   createdAt: timestamp("createdAt").defaultNow(),
   updatedAt: timestamp("updatedAt").defaultNow(),
 });
+
+// Attractions table
+export const attractions = pgTable("attractions", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  location: text("location").notNull(),
+  rating: real("rating").notNull().default(0),
+  reviewCount: integer("reviewCount").notNull().default(0),
+  category: text("category").notNull(),
+  imageUrl: text("imageUrl"),
+  openingHours: text("openingHours"),
+  priceRange: text("priceRange"),
+  latitude: real("latitude"),
+  longitude: real("longitude"),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+});
+
+// Reviews table
+export const reviews = pgTable("reviews", {
+  id: text("id").primaryKey(),
+  attractionId: text("attractionId")
+    .notNull()
+    .references(() => attractions.id, { onDelete: "cascade" }),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  rating: integer("rating").notNull(),
+  title: text("title"),
+  content: text("content").notNull(),
+  isVerified: boolean("isVerified").notNull().default(false),
+  tokensEarned: integer("tokensEarned").notNull().default(0),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt").notNull().defaultNow(),
+});
+
+// Token history table - append-only design for tracking all token transactions
+export const tokenHistory = pgTable("tokenHistory", {
+  id: text("id").primaryKey(),
+  userId: text("userId")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  amount: integer("amount").notNull(), // positive for earned, negative for spent
+  type: text("type").notNull(), // 'earned', 'spent', 'bonus', 'refund'
+  source: text("source").notNull(), // 'review', 'signup', 'purchase', 'admin', etc.
+  sourceId: text("sourceId"), // reference to review id, purchase id, etc.
+  description: text("description").notNull(),
+  metadata: text("metadata"), // JSON string for additional data
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+});
+

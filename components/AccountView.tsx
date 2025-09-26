@@ -81,7 +81,7 @@ export default function AccountView() {
               Sign in to your account
             </h2>
             <p className="text-gray-600 mb-6">
-              Access your profile, reviews, and earn credits
+              Access your profile, reviews, and earn tokens
             </p>
             <button
               onClick={() => setShowSignIn(true)}
@@ -169,29 +169,27 @@ export default function AccountView() {
             </div>
           )}
 
-          {/* Credit System Info */}
+          {/* Token System Info */}
           <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border border-yellow-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Earn Credits by Signing Up!
+              Earn Tokens by Signing Up!
             </h3>
             <p className="text-gray-700 text-sm mb-4">
-              Create an account to start earning credits by writing reviews for
+              Create an account to start earning tokens by writing reviews for
               Hong Kong attractions.
             </p>
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-600">Sign up bonus</span>
-                <span className="font-medium text-yellow-600">
-                  +100 credits
-                </span>
+                <span className="font-medium text-yellow-600">+100 tokens</span>
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-600">Write a review</span>
-                <span className="font-medium text-yellow-600">+50 credits</span>
+                <span className="font-medium text-yellow-600">+50 tokens</span>
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-600">Add photos</span>
-                <span className="font-medium text-yellow-600">+25 credits</span>
+                <span className="font-medium text-yellow-600">+25 tokens</span>
               </div>
             </div>
           </div>
@@ -233,7 +231,7 @@ export default function AccountView() {
           </div>
         </div>
 
-        {/* Credits & Stats */}
+        {/* Tokens & Stats */}
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="bg-white rounded-xl shadow-md border border-gray-100 p-4">
             <div className="flex items-center space-x-3">
@@ -241,7 +239,7 @@ export default function AccountView() {
                 <IconCoin className="w-5 h-5 text-yellow-600" />
               </div>
               <div>
-                <p className="text-sm text-gray-600">Credits</p>
+                <p className="text-sm text-gray-600">Tokens</p>
                 <p className="text-xl font-semibold text-gray-900">1,250</p>
               </div>
             </div>
@@ -285,29 +283,29 @@ export default function AccountView() {
           </div>
         </div>
 
-        {/* Credit System Info */}
+        {/* Token System Info */}
         <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border border-yellow-200 p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
-            Earn More Credits!
+            Earn More Tokens!
           </h3>
           <p className="text-gray-700 text-sm mb-4">
-            Write reviews for Hong Kong attractions to earn credits. Use credits
+            Write reviews for Hong Kong attractions to earn tokens. Use tokens
             for exclusive rewards and discounts.
           </p>
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
               <span className="text-gray-600">Write a review</span>
-              <span className="font-medium text-yellow-600">+50 credits</span>
+              <span className="font-medium text-yellow-600">+50 tokens</span>
             </div>
             <div className="flex items-center justify-between text-sm">
               <span className="text-gray-600">Add photos</span>
-              <span className="font-medium text-yellow-600">+25 credits</span>
+              <span className="font-medium text-yellow-600">+25 tokens</span>
             </div>
             <div className="flex items-center justify-between text-sm">
               <span className="text-gray-600">
                 Detailed review (100+ words)
               </span>
-              <span className="font-medium text-yellow-600">+25 credits</span>
+              <span className="font-medium text-yellow-600">+25 tokens</span>
             </div>
           </div>
         </div>
