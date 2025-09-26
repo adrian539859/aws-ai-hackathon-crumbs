@@ -212,6 +212,7 @@ export default function AccountView() {
   useEffect(() => {
     if (session?.user) {
       fetchUserStats();
+      fetchTreePlantings();
     }
   }, [session]);
 
