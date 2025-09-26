@@ -113,7 +113,7 @@ export default function TripHistoryPage() {
     };
 
     fetchUserTrips();
-  }, [user, selectedStatus, requireAuth]);
+  }, [user, selectedStatus]);
 
   const handleBack = () => {
     router.back();
