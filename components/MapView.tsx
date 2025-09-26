@@ -20,11 +20,11 @@ const createDefaultIcon = () => {
   });
 };
 
-// Create user location icon (different color)
+// Create user location icon (orange color)
 const createUserIcon = () => {
   return L.icon({
     iconUrl:
-      "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png",
+      "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png",
     shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
     iconSize: [25, 41],
     iconAnchor: [12, 41],
