@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
             category: trip.category as Trip['category'],
             transportMode: JSON.parse(trip.transportMode),
             accessibility: JSON.parse(trip.accessibility),
-            imageUrl: trip.imageUrl,
+            imageUrl: trip.imageUrl || undefined,
             itinerary: JSON.parse(trip.itinerary),
             metadata: trip.metadata ? JSON.parse(trip.metadata) : undefined,
             createdAt: trip.createdAt,

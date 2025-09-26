@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { userTrips, trips } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import type { UserTrip } from "@/lib/types";
@@ -24,8 +24,16 @@ export async function GET(request: NextRequest) {
         const limit = parseInt(searchParams.get("limit") || "20");
         const offset = parseInt(searchParams.get("offset") || "0");
 
+        // Build query conditions
+        const conditions = [eq(userTrips.userId, session.user.id)];
+
+        // Add status filter if provided
+        if (status) {
+            conditions.push(eq(userTrips.status, status));
+        }
+
         // Build query with join to get trip details
-        let query = db
+        const query = db
             .select({
                 id: userTrips.id,
                 userId: userTrips.userId,
@@ -52,15 +60,10 @@ export async function GET(request: NextRequest) {
             })
             .from(userTrips)
             .innerJoin(trips, eq(userTrips.tripId, trips.id))
-            .where(eq(userTrips.userId, session.user.id))
+            .where(and(...conditions))
             .orderBy(userTrips.unlockedAt)
             .limit(limit)
             .offset(offset);
-
-        // Add status filter if provided
-        if (status) {
-            query = query.where(eq(userTrips.status, status));
-        }
 
         const result = await query;
 
@@ -72,8 +75,8 @@ export async function GET(request: NextRequest) {
             unlockedAt: row.unlockedAt,
             tokensSpent: row.tokensSpent,
             status: row.status as UserTrip['status'],
-            startedAt: row.startedAt,
-            completedAt: row.completedAt,
+            startedAt: row.startedAt || undefined,
+            completedAt: row.completedAt || undefined,
             progress: row.progress ? JSON.parse(row.progress) : undefined,
             createdAt: row.createdAt,
             updatedAt: row.updatedAt,
@@ -90,7 +93,7 @@ export async function GET(request: NextRequest) {
                 category: row.tripCategory as any,
                 transportMode: JSON.parse(row.tripTransportMode),
                 accessibility: JSON.parse(row.tripAccessibility),
-                imageUrl: row.tripImageUrl,
+                imageUrl: row.tripImageUrl || undefined,
                 itinerary: JSON.parse(row.tripItinerary),
                 createdAt: new Date(),
                 updatedAt: new Date(),
@@ -146,8 +149,10 @@ export async function PATCH(request: NextRequest) {
         const existingUserTrip = await db
             .select()
             .from(userTrips)
-            .where(eq(userTrips.userId, session.user.id))
-            .where(eq(userTrips.tripId, tripId))
+            .where(and(
+                eq(userTrips.userId, session.user.id),
+                eq(userTrips.tripId, tripId)
+            ))
             .limit(1);
 
         if (existingUserTrip.length === 0) {
@@ -178,8 +183,10 @@ export async function PATCH(request: NextRequest) {
         await db
             .update(userTrips)
             .set(updateData)
-            .where(eq(userTrips.userId, session.user.id))
-            .where(eq(userTrips.tripId, tripId));
+            .where(and(
+                eq(userTrips.userId, session.user.id),
+                eq(userTrips.tripId, tripId)
+            ));
 
         return NextResponse.json({
             success: true,
