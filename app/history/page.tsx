@@ -269,109 +269,99 @@ export default function TripHistoryPage() {
                     onClick={() => handleTripSelect(userTrip)}
                     className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-pointer hover:shadow-md transition-all duration-200 group"
                   >
-                    <div className="relative">
-                      <ShineBorder
-                        className="rounded-xl"
-                        shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
-                        borderWidth={1}
-                        duration={12}
-                      />
+                    <div className="p-4">
+                      <div className="flex gap-4">
+                        {/* Trip Image Placeholder */}
+                        <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg flex items-center justify-center text-2xl">
+                          {getCategoryEmoji(trip.category)}
+                        </div>
 
-                      <div className="p-4">
-                        <div className="flex gap-4">
-                          {/* Trip Image Placeholder */}
-                          <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg flex items-center justify-center text-2xl">
-                            {getCategoryEmoji(trip.category)}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between mb-2">
+                            <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                              {trip.name}
+                            </h3>
+                            <div
+                              className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
+                                userTrip.status
+                              )}`}
+                            >
+                              <StatusIcon className="w-3 h-3" />
+                              <span className="capitalize">
+                                {userTrip.status}
+                              </span>
+                            </div>
                           </div>
 
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-start justify-between mb-2">
-                              <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                                {trip.name}
-                              </h3>
-                              <div
-                                className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
-                                  userTrip.status
-                                )}`}
-                              >
-                                <StatusIcon className="w-3 h-3" />
-                                <span className="capitalize">
-                                  {userTrip.status}
-                                </span>
+                          <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                            {trip.description}
+                          </p>
+
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-4 text-sm text-gray-500">
+                              <div className="flex items-center gap-1">
+                                <IconClock className="w-4 h-4" />
+                                <span>{trip.duration}</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <IconStar className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                                <span>{trip.rating.toFixed(1)}</span>
+                                <span>({trip.reviewCount})</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <IconCoins className="w-4 h-4 text-orange-500" />
+                                <span>{userTrip.tokensSpent} tokens</span>
                               </div>
                             </div>
 
-                            <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                              {trip.description}
-                            </p>
-
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-4 text-sm text-gray-500">
-                                <div className="flex items-center gap-1">
-                                  <IconClock className="w-4 h-4" />
-                                  <span>{trip.duration}</span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                  <IconStar className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                                  <span>{trip.rating.toFixed(1)}</span>
-                                  <span>({trip.reviewCount})</span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                  <IconCoins className="w-4 h-4 text-orange-500" />
-                                  <span>{userTrip.tokensSpent} tokens</span>
-                                </div>
-                              </div>
-
-                              <div className="flex items-center gap-2">
-                                {trip.transportMode.slice(0, 2).map((mode) => {
-                                  const Icon = getTransportIcon(mode);
-                                  return (
-                                    <Icon
-                                      key={mode}
-                                      className="w-4 h-4 text-gray-400"
-                                    />
-                                  );
-                                })}
-                                {trip.accessibility.visuallyImpaired && (
-                                  <IconEye className="w-4 h-4 text-purple-500" />
-                                )}
-                                {trip.accessibility.wheelchairAccessible && (
-                                  <IconWheelchair className="w-4 h-4 text-blue-500" />
-                                )}
-                              </div>
+                            <div className="flex items-center gap-2">
+                              {trip.transportMode.slice(0, 2).map((mode) => {
+                                const Icon = getTransportIcon(mode);
+                                return (
+                                  <Icon
+                                    key={mode}
+                                    className="w-4 h-4 text-gray-400"
+                                  />
+                                );
+                              })}
+                              {trip.accessibility.visuallyImpaired && (
+                                <IconEye className="w-4 h-4 text-purple-500" />
+                              )}
+                              {trip.accessibility.wheelchairAccessible && (
+                                <IconWheelchair className="w-4 h-4 text-blue-500" />
+                              )}
                             </div>
                           </div>
                         </div>
+                      </div>
 
-                        {/* Trip Details */}
-                        <div className="mt-4 pt-4 border-t border-gray-100">
-                          <div className="flex items-center justify-between text-sm text-gray-600">
-                            <div className="flex items-center gap-1">
-                              <IconCalendar className="w-4 h-4" />
-                              <span>
-                                Unlocked: {formatDate(userTrip.unlockedAt)}
-                              </span>
-                            </div>
-                            {userTrip.status === "started" &&
-                              userTrip.startedAt && (
-                                <div className="flex items-center gap-1">
-                                  <IconPlayerPlay className="w-4 h-4" />
-                                  <span>
-                                    Started: {formatDate(userTrip.startedAt)}
-                                  </span>
-                                </div>
-                              )}
-                            {userTrip.status === "completed" &&
-                              userTrip.completedAt && (
-                                <div className="flex items-center gap-1">
-                                  <IconCheck className="w-4 h-4" />
-                                  <span>
-                                    Completed:{" "}
-                                    {formatDate(userTrip.completedAt)}
-                                  </span>
-                                </div>
-                              )}
+                      {/* Trip Details */}
+                      <div className="mt-4 pt-4 border-t border-gray-100">
+                        <div className="flex items-center justify-between text-sm text-gray-600">
+                          <div className="flex items-center gap-1">
+                            <IconCalendar className="w-4 h-4" />
+                            <span>
+                              Unlocked: {formatDate(userTrip.unlockedAt)}
+                            </span>
                           </div>
+                          {userTrip.status === "started" &&
+                            userTrip.startedAt && (
+                              <div className="flex items-center gap-1">
+                                <IconPlayerPlay className="w-4 h-4" />
+                                <span>
+                                  Started: {formatDate(userTrip.startedAt)}
+                                </span>
+                              </div>
+                            )}
+                          {userTrip.status === "completed" &&
+                            userTrip.completedAt && (
+                              <div className="flex items-center gap-1">
+                                <IconCheck className="w-4 h-4" />
+                                <span>
+                                  Completed: {formatDate(userTrip.completedAt)}
+                                </span>
+                              </div>
+                            )}
                         </div>
                       </div>
                     </div>

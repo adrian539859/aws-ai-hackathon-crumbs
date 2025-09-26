@@ -424,7 +424,7 @@ function ResultPageContent() {
                                 </div>
                                 <div className="flex items-center gap-1">
                                   <IconStar className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                                  <span>{trip.rating}</span>
+                                  <span>{trip.rating.toFixed(2)}</span>
                                   <span>({trip.reviewCount})</span>
                                 </div>
                               </div>
@@ -491,7 +491,7 @@ function ResultPageContent() {
                             ) : userTrips.includes(trip.id) ? (
                               "Start Journey"
                             ) : (
-                              "Unlock Free"
+                              "Add to Collection"
                             )}
                           </button>
                         </div>

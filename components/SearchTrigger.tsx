@@ -35,14 +35,35 @@ interface SearchTriggerProps {
   className?: string;
 }
 
+// Helper function to get current time + 4 hours, rounded to nearest 30 minutes
+const getDefaultTime = () => {
+  const now = new Date();
+  // Add 4 hours
+  now.setHours(now.getHours() + 4);
+
+  // Round to nearest 30 minutes
+  const minutes = now.getMinutes();
+  if (minutes <= 15) {
+    now.setMinutes(0);
+  } else if (minutes <= 45) {
+    now.setMinutes(30);
+  } else {
+    now.setMinutes(0);
+    now.setHours(now.getHours() + 1);
+  }
+
+  // Format as HH:MM
+  return now.toTimeString().slice(0, 5);
+};
+
 export default function SearchTrigger({ className = "" }: SearchTriggerProps) {
   const router = useRouter();
   const { requireAuth } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   // Set default values to match old search screen
   const [destination, setDestination] = useState("Tai Kwun");
-  const [date, setDate] = useState(new Date(2025, 0, 18)); // January 18, 2025
-  const [time, setTime] = useState("16:00"); // 4:00 PM
+  const [date, setDate] = useState(new Date()); // Current date
+  const [time, setTime] = useState(getDefaultTime()); // Current time + 4 hours, rounded to nearest 30 minutes
   const [travelers, setTravelers] = useState("1");
   const [transportMode, setTransportMode] = useState<"car" | "walk" | "bike">(
     "car"

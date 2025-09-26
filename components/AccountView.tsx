@@ -255,27 +255,6 @@ export default function AccountView() {
               <span>Sign In</span>
             </button>
           </div>
-
-          {/* Token System Info */}
-          <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border border-yellow-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Earn Tokens by Signing In!
-            </h3>
-            <p className="text-gray-700 text-sm mb-4">
-              Sign in to start earning tokens by writing reviews for Hong Kong
-              attractions.
-            </p>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">Write a review</span>
-                <span className="font-medium text-yellow-600">+3 tokens</span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">Plant a tree (ESG)</span>
-                <span className="font-medium text-green-600">10 tokens</span>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     );

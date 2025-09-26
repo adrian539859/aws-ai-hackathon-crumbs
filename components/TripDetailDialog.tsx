@@ -152,43 +152,36 @@ export default function TripDetailDialog({
 
         <div className="space-y-6">
           {/* Trip Stats */}
-          <ShineBorder
-            className="rounded-xl"
-            shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]}
-            borderWidth={1}
-            duration={12}
-          >
-            <div className="p-4 bg-white rounded-xl">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="text-center">
-                  <IconClock className="w-6 h-6 text-blue-500 mx-auto mb-2" />
-                  <p className="text-sm text-gray-600">Duration</p>
-                  <p className="font-semibold text-gray-900">{trip.duration}</p>
-                </div>
-                <div className="text-center">
-                  <IconStar className="w-6 h-6 text-yellow-500 mx-auto mb-2" />
-                  <p className="text-sm text-gray-600">Rating</p>
-                  <p className="font-semibold text-gray-900">
-                    {trip.rating.toFixed(1)} ({trip.reviewCount})
-                  </p>
-                </div>
-                <div className="text-center">
-                  <IconCoins className="w-6 h-6 text-orange-500 mx-auto mb-2" />
-                  <p className="text-sm text-gray-600">Cost</p>
-                  <p className="font-semibold text-gray-900">
-                    {userTrip.tokensSpent} tokens
-                  </p>
-                </div>
-                <div className="text-center">
-                  <IconRoute className="w-6 h-6 text-purple-500 mx-auto mb-2" />
-                  <p className="text-sm text-gray-600">Stops</p>
-                  <p className="font-semibold text-gray-900">
-                    {trip.itinerary?.length || 0}
-                  </p>
-                </div>
+          <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center">
+                <IconClock className="w-6 h-6 text-blue-500 mx-auto mb-2" />
+                <p className="text-sm text-gray-600">Duration</p>
+                <p className="font-semibold text-gray-900">{trip.duration}</p>
+              </div>
+              <div className="text-center">
+                <IconStar className="w-6 h-6 text-yellow-500 mx-auto mb-2" />
+                <p className="text-sm text-gray-600">Rating</p>
+                <p className="font-semibold text-gray-900">
+                  {trip.rating.toFixed(1)} ({trip.reviewCount})
+                </p>
+              </div>
+              <div className="text-center">
+                <IconCoins className="w-6 h-6 text-orange-500 mx-auto mb-2" />
+                <p className="text-sm text-gray-600">Cost</p>
+                <p className="font-semibold text-gray-900">
+                  {userTrip.tokensSpent} tokens
+                </p>
+              </div>
+              <div className="text-center">
+                <IconRoute className="w-6 h-6 text-purple-500 mx-auto mb-2" />
+                <p className="text-sm text-gray-600">Stops</p>
+                <p className="font-semibold text-gray-900">
+                  {trip.itinerary?.length || 0}
+                </p>
               </div>
             </div>
-          </ShineBorder>
+          </div>
 
           {/* Trip Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
