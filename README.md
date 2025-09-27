@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CRUMBS: Treasure Every Second of Your Travel
+
+A progressive web app (PWA) that transforms fragmented travel moments into meaningful experiences while supporting local communities and environmental sustainability.
+
+## About This Demo
+
+**Note: This is a demo version using seed data.** The AI-driven personalization and open data integration features are planned for the next development phase.
+
+## What CRUMBS Does
+
+CRUMBS helps travelers make the most of their time gaps by providing AI-powered trip planning that seamlessly fits local culture, food, and eco-spots into available time slots. Our token-based ecosystem enables users to:
+
+- Purchase curated trip experiences
+- Earn tokens by reviewing locations and adding new spots
+- Donate tokens to plant trees through our ESG initiatives
+- Exchange tokens for partner coupons and local business support
+
+## Key Highlights
+
+- **AI-Powered Trip Planning**: Intelligent algorithms that match destinations to available time slots
+- **Token Economy**: Community-driven system supporting local businesses and environmental causes
+- **ESG Focus**: Tree-planting initiatives and sustainable tourism practices
+- **Progressive Web App**: Cross-platform accessibility with native app-like experience
+- **Community Building**: User-generated content and reviews that enhance the platform
+
+## Inspiration
+
+We're inspired by the untapped joy in Hong Kong's fragmented travel moments—a chance to connect travelers with local culture and nature. CRUMBS was born from a sincere desire to enhance experiences, support microbusinesses, and plant trees through tokens, embedding ESG as a heartfelt mission to sustain our world.
+
+## How We Built It
+
+Using agile methodology and design thinking, we created a comprehensive PRD outlining our MVP:
+
+- **P0**: Trip planning functionality
+- **P1**: Token system implementation
+
+Built with Next.js for seamless PWA cross-platform access, integrating maps, authentication, and backend features while maintaining focus on intuitive UI flows, accessibility, and eco-conscious design.
+
+## Roadmap
+
+### Current Phase (Demo)
+
+- Basic trip planning interface
+- Token display and management
+- User authentication
+- Seed data for demonstration
+
+### Next Phase
+
+- **AI Integration**: Implement machine learning algorithms for personalized trip recommendations
+- **Open Data Integration**: Connect with real-time Hong Kong tourism and transportation data
+- **Enhanced Personalization**: Advanced user preference learning and trip optimization
+- **Expanded Token Ecosystem**: More partner integrations and tree-planting initiatives
+- **Global Accessibility**: Multi-language support and international expansion
+
+### Future Vision
+
+- Predictive analytics for smarter trip planning
+- Worldwide community network
+- Advanced ESG tracking and impact measurement
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- pnpm (recommended) or npm/yarn
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Set up environment variables:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cp .env.example .env
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Edit `.env` with your configuration values.
 
-## Learn More
+4. Run the development server:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpm dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Building for Production
 
-## Deploy on Vercel
+```bash
+pnpm build
+pnpm start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Tech Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Frontend**: Next.js 15, React, TypeScript
+- **Styling**: Tailwind CSS
+- **Database**: PostgreSQL with Drizzle ORM
+- **Authentication**: Better-auth
+
+## What's Next
+
+We'll enhance AI with predictive analytics for smarter trips, expand the token ecosystem with more partners and tree-planting initiatives, and refine UI for global accessibility. Our vision is a worldwide community uplifting locals and nature—let's grow this journey together!
