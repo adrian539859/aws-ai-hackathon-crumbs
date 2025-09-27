@@ -1,6 +1,12 @@
+<div align="center">
+
+![CRUMBS Logo](images/crumbs-logo.png)
+
 # CRUMBS: Treasure Every Second of Your Travel
 
 A progressive web app (PWA) that transforms fragmented travel moments into meaningful experiences while supporting local communities and environmental sustainability.
+
+</div>
 
 ## About This Demo
 
@@ -26,6 +32,20 @@ CRUMBS helps travelers make the most of their time gaps by providing AI-powered 
 ## Inspiration
 
 We're inspired by the untapped joy in Hong Kong's fragmented travel moments—a chance to connect travelers with local culture and nature. CRUMBS was born from a sincere desire to enhance experiences, support microbusinesses, and plant trees through tokens, embedding ESG as a heartfelt mission to sustain our world.
+
+## Screenshots
+
+### Trip Planning Interface
+
+![Trip Planning Interface](images/plan.png)
+
+### Trip Details View
+
+![Trip Details](images/trip-details.png)
+
+### ESG & Token System
+
+![ESG Features](images/esg.png)
 
 ## How We Built It
 
